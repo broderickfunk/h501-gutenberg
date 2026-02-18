@@ -9,12 +9,13 @@ def list_authors(by_languages: bool = True, alias: bool = True) -> list[str]:
     authors = pd.read_csv(f"{url}gutenberg_authors.csv")
     languages = pd.read_csv(f"{url}gutenberg_languages.csv")
     metadata = pd.read_csv(f"{url}gutenberg_metadata.csv")
-    meta = metadata[["gutenberg_id", "author_id"]].dropna()
+    meta = metadata[["gutenberg_id", "gutenberg_author_id"]].dropna()
 
     merged = (
-        languages.merge(meta, on="gutenberg_id", how="inner")
-                    .merge(authors[["author_id", "alias"]], on="author_id", how="inner")
+    languages.merge(meta, on="gutenberg_id", how="inner")
+             .merge(authors[["gutenberg_author_id", "alias"]], on="gutenberg_author_id", how="inner")
     )
+
 
     s = merged["alias"].astype("string").str.strip()
     s_lower = s.str.lower()
